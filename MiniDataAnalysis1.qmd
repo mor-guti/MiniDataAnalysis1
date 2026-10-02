@@ -1,7 +1,7 @@
 ---
 title: "Mini Data-Analysis: Deliverable 1"
 format: gfm
-author: "Your name here"
+author: "Morgan Gutierrez"
 ---
 
 Total points available: 74
@@ -73,9 +73,9 @@ Out of the 5 data sets listed above, choose **2** that appeal to you based on th
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: Write 1st choice here
+1: Squirrel
 
-2: Write 2nd choice here
+2: Rolling Stones
 
 
 <!----------------------------------------------------------------------------->
@@ -90,11 +90,21 @@ One way to narrowing down your selection is to *explore* the data sets. Use your
 #### Data Set 1
 ```{r}
 ### Explore 3 variables of data set 1 ###
+library(tidyverse)
+squirrel <- read_csv("dat/squirrel-data.csv")
 
+squirrel |>
+  ggplot(aes(`Primary Fur Color`)) +
+  geom_bar()
+
+squirrel |>
+  mutate(jump_height = as.numeric(`Above Ground (Height in Feet)`)) |>
+  summarise(mean_height = mean(jump_height, na.rm=TRUE))
+  
 ```
 
 
-Write your findings here.
+Write your findings here. The squirrel data set has a lot of missing values and unclean data.
 
 
 
@@ -103,11 +113,36 @@ Write your findings here.
 ```{r}
 ### Explore 3 variables of data set 2 ###
 
+music <- read_csv("dat/RollingStone500.csv")
+
+glimpse(music)
+
+music |>
+  ggplot(aes(`2003 Rank`, `2020 Rank`)) +
+  geom_point()
+
+
+#album release year to weeks on billboard
+#how has staying power on the charts changed over time?
+#2 quant vars so we could look at scatterplot
+
+music |>
+  mutate(weeks = as.numeric(`Wks on Billboard`)) |>
+  ggplot(aes(x=`Release Year`, weeks)) +
+  geom_point()
+
+
+music |>
+  mutate(weeks = as.numeric(`Wks on Billboard`)) |>
+  group_by(`Album Genre`) |>
+  summarise(mean_wks = mean(weeks, na.rm = TRUE)) |>
+  arrange(mean_wks)
+
 ```
 
 Write your findings here.
 
-
+I haven't found data that is super strongly correlated yet. There is one major outlier for release year and weeks at number one.
 
 
 <!----------------------------------------------------------------------------->
@@ -124,7 +159,7 @@ It's time to choose only one data set. State the data set that you've chosen, an
 
 <!-------------------------- Start your work below ---------------------------->
 
-
+I've choosen the music data set because I think that its a cooler set of data.
 
 <!----------------------------------------------------------------------------->
 
@@ -140,12 +175,12 @@ Write your research questions **as questions**, and be specific. You can change 
 <!-------------------------- Start your work below ---------------------------->
 
 
-
+Is there a relationship between peak billboard position and Spotify popularity? Does this relationship differ by Release Year?
 
 <!----------------------------------------------------------------------------->
 
 
-
+data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAEo0lEQVR4XrWW7U9bdRTHr9qytvdeWrqWQoGhuCE4ySaW0gd6ewurbUB9ofFhRn1BfGMyDRJHHHELb/wv9lJfGrIluoDTF5psDeAWk0UClEJ5kvE4xsM6Te71973lB5e7lrZk3uTLJb2/cz7n/H7n3nMYZu96Te+srbVZy06cZq3OsLHYcd7A2zv1vO1TPW/tzEumtAzEhrc6O0scVedLT5wKn3z5zOmKurrjBKLf56WvZxwOB1tf/2q1p+Wc6A+Ge5t9bf1urxhzNQsjRMMuNxHumYRnahGbZm8o5guc6w+EIr0u4vMF4tvpdJrA2oMS6Y3G4xWAfvBR59Wurp744OAvqfHxCWl6Oinn0tTUtKJEYkqenEzIExNx+d69UenGjcHUhS++ine89f7Vs64WEQywKPhZImNREfeK0Br9uufS5Tgxlubm5uW5uYU8NS/Pzs7JMzOzSiAIIB6flMfHEcBf0mcXuuMef1svy5Y0EBayBpN5jqiY0Rm9XiH8w2+/33q0uLgk37+/LC8treQlrIXNwsKiEggCwA5Q+I8/DaT8gfA1i71cYBiLhWaNPyU6nUEkUd2en/9bWl1dl9fWHsjr6xt5CWths7y8qgRAfChwZE633RcID5VXnYxwHGcnPAPARURWAm51e1tH4GhjY1N++HBL3tzczktYCxvYrqysycaLA0rmyeSMcubI2i+8freypr6dtdvLGFLIe2BGZwi5vaFhONna2pG3tx/JOzupvIS1sIEtoBC2XZ21Pxi5U11T32Gy2ZyMzcYDfEwNhgM4S6X+KUiwoVAIW46Cw1nvg091pCvbWvwEGNHD0ePH/xYkNRRCwaHaaZEBXFFNwcxBcBMB02zVDrUQrbRQCNWOc8br9SRYk3E28GFwLRBCkT01cCa4Fgihyp86WA3X/g7B9n8DZxOt7COBUdVacD5wrCkMrKlqty8z+DA4fZ4LHBAPy/gQcCa4+lkusCBGlS9XRjBp/oeC1XDt77nAyDgbuJV0p5Fc4GzKBRbEyF1stclkchLe/rdaZ+BC3kA4Royko4LxuUWjQJtUfzJHR8ekgBAespc/H2UYtozwlO4EcInOwLeIbe39f9z5M0WzLkSwQYNBe0RvVjeJgYGbKSEYvc5ZbEHCshEZAUZb5FnWcjbS8c6Vy1e+nV5dfSAdtS1imzEQ0LY4NjYudV/8JknGqj6TydzIpF8lJMvoEIHZXFrjF6Ltb7/38Xdfdl9K3ro9nFpZWZe0TT+TtIMAsk0kpqWfb/6a+ryrJ/nuh598TybODrPZ/CKTnrmU0QczVxHHldkra+oa6s6433D7xL4mT/BaozsQw7ja2BQYKkTKiOsRYmSiuU4m175GT/BN4roBjN1skawCJv/YOZZlHcd4vpZsiYvjLCJrtobZYmtEuecj1pzWrg1nsYgms9nF87aX2NJSB2O3c7vZgqmMmhDOGoeOM8DUj+rD562KqHL3no/oWtjCB3zBJ3yDAagy3mKgh3YzVx5iO3AWKHu8cxCM8xFdD1v4gC/4hG8wKG/voj8gGhoIhK05iqi92ucBIL3UYIgaIlJI6zib6HpqT/0dAP8H3NVfiM/oU1UAAAAASUVORK5CYII=
 ### 1.5: Commit  **(2 points)**
 
 Commit your work and push it to GitHub. Include an informative commit message, and include "(1.5)" in the message.
@@ -166,7 +201,10 @@ Your task is to create a table that calculates the proportion of missing values 
 
 ```{r}
 ### Explore missingness here ###
-
+missing_prop <- colMeans(is.na(music))
+missing_table <- data.frame(Variable = names(missing_prop),
+                             proportion = missing_prop,
+                             percentage = round(missing_prop * 100))
 ```
 
 
@@ -190,7 +228,7 @@ If missingness is not an issue, describe why.
 
 <!-------------------------- Start your work below ---------------------------->
 
-
+For my research question there isn't an issue with missingness as the columns id use like spotify popularity and billboard chart peak don't have over 20% missing.
 
 
 <!----------------------------------------------------------------------------->
@@ -216,6 +254,10 @@ Show the first 6 rows of the tidied data.
 
 <!-------------------------- Start your work below ---------------------------->
 ```{r}
+music_tidy <- music |>
+  select(`Album`, `Spotify Popularity`, `Release Year`, `Peak Billboard Position`) |>
+  mutate(`Spotify Popularity` = as.integer(`Spotify Popularity`))
+
 
 
 
@@ -233,7 +275,17 @@ Show the outputted table.
 
 <!-------------------------- Start your work below ---------------------------->
 ```{r}
-
+music_tidy |>
+  summarise(mean_popularity = mean(`Spotify Popularity`, na.rm=TRUE),
+            min_popularity = min(`Spotify Popularity`, na.rm= TRUE),
+            max_popularity = max(`Spotify Popularity`, na.rm=TRUE),
+            mean_yr = mean(`Release Year`, na.rm=TRUE),
+            min_yr = min(`Release Year`, na.rm=TRUE),
+            max_yr = min(`Release Year`, na.rm = TRUE),
+            mean_peak = mean(`Peak Billboard Position`, na.rm=TRUE),
+            min_peak = min(`Peak Billboard Position`, na.rm=TRUE),
+            max_peak = max(`Peak Billboard Position`, na.rm=TRUE)
+  )
 
 
 
